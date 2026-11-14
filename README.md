@@ -1,11 +1,57 @@
-<div align="center">
+# تدريبك — Tadreebak | منصة المختبرات التفاعلية وبناء البروفايل المهني الموثق
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+> **"تدرّب في مختبراتنا، ابنِ بروفايلك، ودع الشركات تجدك"**
 
-  <h1>Built with AI Studio</h2>
+منصة **تدريبك (Tadreebak)** هي تطبيق ويب تفاعلي مبني باستخدام **Next.js (App Router)** و **TypeScript** و **Tailwind CSS** و **Zustand**. يتدرب فيها طلاب الجامعات والخريجون الجدد **داخل الموقع نفسه** عبر **4 مختبرات عملية تحاكي شركة افتراضية موحدة**:
+1. **مختبر المحاسبة (`/labs/accounting`)**: محاكي معادلة الميزانية (`الأصول = الالتزامات + حقوق الملكية`)، مولّد قيود اليومية المزدوجة، ووضع الاختبار التفاعلي `"اختبرني"`.
+2. **مختبر التسويق الرقمي (`/labs/marketing`)**: محاكي الحملات الإعلانية وتسعير المنتجات وحساب `CAC` و `ROI%` وترحيل النتائج مباشرة لقسم المحاسبة.
+3. **مختبر إدارة الأعمال (`/labs/management`)**: حاسبة ومخطط نقطة التعادل (`Break-Even Point`)، مصفوفة `SWOT` التفاعلية، وسيناريوهات القرارات التنفيذية.
+4. **مختبر البرمجة بلغة بايثون (`/labs/python`)**: محرر أكواد تفاعلي يعمل داخل المتصفح عبر **Pyodide (WebAssembly)** مع محرك تقييم احتياطي فوري و5 تمارين برمجية مرتبطة بالأعمال.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+أداء الطالب ونقاط خبرته (`XP`) في المختبرات الأربعة يبني **تلقائياً** بروفايله المهني العام القابل للمشاركة والأرشفة (`/students/[username]`) مع مخطط رادار (`Radar Chart`) وشهادات إتمام قابلة للتحميل (`Canvas PNG / PDF`)، بينما تستطيع الشركات عبر بوابة الشركات (`/company/dashboard`) البحث عن الطلاب المتميزين وتصفيتهم ومراسلتهم مباشرة.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+---
 
-</div>
+## التشغيل السريع (Quick Start)
+
+```bash
+npm install
+npm run dev
+```
+
+ثم افتح المتصفح على الرابط: `http://localhost:3000`
+
+لتشغيل اختبارات الوحدات البرمجية للمختبرات الأربعة وحاسبة المهارات:
+```bash
+npx tsx --test lib/labs/labs.test.ts
+```
+
+---
+
+## هيكلة الملفات (Project Structure)
+
+- `app/`
+  - `page.tsx`: الصفحة الرئيسية الجديدة (Hero + البحث عن مختبر أو مهارة + المختبرات التفاعلية الأربعة + معاينة الشركة الافتراضية + المتصدرون + قسم الشركات).
+  - `labs/page.tsx`: مركز المختبرات الأربعة مع شريط حالة الشركة الافتراضية الموحد.
+  - `labs/accounting/page.tsx`: مختبر المحاسبة التفاعلي.
+  - `labs/marketing/page.tsx`: مختبر التسويق الرقمي.
+  - `labs/management/page.tsx`: مختبر إدارة الأعمال والقرارات التنفيذية.
+  - `labs/python/page.tsx`: مختبر بايثون التفاعلي لتحليل الأعمال.
+  - `leaderboard/page.tsx`: لوحة المتصدرين المباشرة مع الفلترة حسب المختبر والجامعة والتخصص.
+  - `students/[username]/page.tsx`: البروفايل المهني العام للطالب (يدعم SEO).
+  - `dashboard/page.tsx`: لوحة الطالب التدريبية وصندوق رسائل الشركات الواردة.
+  - `for-companies/page.tsx`: الصفحة التعريفية للشركات.
+  - `company/dashboard/page.tsx`: لوحة تحكم الشركات للبحث عن المواهب، القائمة المختصرة، وإرسال الدعوات.
+  - `login/page.tsx` & `register/page.tsx`: صفحات الدخول والتسجيل مع أزرار الدخول التجريبي السريع.
+- `lib/labs/`: المحركات الحسابية النقية للمختبرات الأربعة (`accounting.ts`, `marketing.ts`, `management.ts`, `python.ts`, `skill-calculator.ts`).
+- `store/use-app-store.ts`: مخزن الحالة الموحد عبر `Zustand` مع الحفظ التلقائي في `localStorage`.
+- `data/mock-data.ts`: بيانات 20 طالباً في مختلف الجامعات والتخصصات، و8 شركات شريكة، و5 أوسمة إنجاز.
+
+---
+
+## كيف تربط المشروع بقاعدة بيانات حقيقية لاحقاً (Prisma / Supabase)؟
+
+1. **استبدال البيانات التجريبية (`data/mock-data.ts`)**:
+   - أنشئ جداول `Student`, `LabProgress`, `VirtualCompanyState`, `CompanyMessage`, `Shortlist` في PostgreSQL أو Supabase.
+2. **ربط أفعال المخزن (`store/use-app-store.ts`) بـ Server Actions أو Route Handlers**:
+   - عند استدعاء `applyVirtualCompanyDelta` أو `awardLabXp` أو `sendCompanyMessage`، قم بإرسال طلب `POST /api/...` لحفظ التقدم في قاعدة البيانات مع الإبقاء على التحديث اللحظي للواجهة (Optimistic UI).

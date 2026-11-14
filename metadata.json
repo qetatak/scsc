@@ -1,0 +1,6 @@
+{
+  "name": "Tadreebak - تدريبك",
+  "description": "خطوتك الأولى نحو مسيرتك المهنية — منصة تربط طلاب الجامعات والخريجين الجدد بفرص التدريب العملي والوظائف المبتدئة في الأردن والعالم العربي.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
